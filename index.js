@@ -1,19 +1,35 @@
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-
+const dbDebugger =require("debug")('app:db')
+const debug =require("debug")('app:startup')
 
 const Joi =require("joi")
-const logger =require("./logger")
+const logger =require("./logger");
+const config =require("config");
+
 
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'));
 app.use(helmet());
-app.use(morgan("tiny"))
+//Environment
+console.log(`Node_Env ${process.env.NODE_ENV}`)
+console.log(`app ${app.get('env')}`)
 
-express()
+//Configuration
+console.log("Application Name: " + config.get('name'));
+console.log("Mail Server: " + config.get('mail.host'));
+console.log("Mail Password: " + config.get('mail.password'));
+
+
+if (app.get('env')==='development') {
+    app.use(morgan("tiny"))
+    debug("Morgan Enabled...")
+}
+
+dbDebugger("Connected Db ...")
 
 
 const courses =[
