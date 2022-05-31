@@ -14,6 +14,14 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'));
 app.use(helmet());
+
+
+//Templating Enginies
+
+app.set("view engine","pug")
+app.set("views","./views")
+
+
 //Environment
 console.log(`Node_Env ${process.env.NODE_ENV}`)
 console.log(`app ${app.get('env')}`)
@@ -39,7 +47,8 @@ const courses =[
 ]
 
 app.get('/', (req, res) => {
-    res.send('Hello Word');
+    // res.send('Hello Word');
+    res.render('index',{title:"My Express App",message:"Hello"})
 })
 
 app.get('/api/courses', (req, res) => {
